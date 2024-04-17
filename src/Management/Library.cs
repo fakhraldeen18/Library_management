@@ -8,8 +8,8 @@ namespace sda_onsite_2_csharp_library_management.src
         private string Name;
         public Library(string name)
         {
-            _books = [];
-            _users = [];
+            _books = new List<Book>();
+            _users = new List<User>();
             this.Name = name;
         }
 
@@ -17,9 +17,41 @@ namespace sda_onsite_2_csharp_library_management.src
         {
             return _books;
         }
+        public List<Book> GetBooksWithPagination()
+        {
+            var Page = 1;
+            var itemsPerPage = 4;
+            var currentPage = (Page-1) * itemsPerPage;
+            var paginatedBook = _books
+                                    .Select(i=>i)
+                                    .Skip(currentPage)
+                                    .Take(itemsPerPage)
+                                    .ToList();
+            return paginatedBook;
+        }
+        public List<User> GetUsersWithPagination()
+        {
+            var Page = 1;
+            var itemsPerPage = 4;
+            var currentPage = (Page-1) *  itemsPerPage;
+            var paginatedUser = _users
+                                    .Select(i=>i)
+                                    .Skip(currentPage)
+                                    .Take( itemsPerPage)
+                                    .ToList();
+            return paginatedUser;
+        }
         public void AddBook(Book book)
         {
-            _books.Add(book);
+            Book? exsectBook = _books.Find(findBook => findBook.GetTitle() == book.GetTitle());
+            if (exsectBook != null)
+            {
+                throw new Exception("Book already exists");
+            }
+            else
+            {
+                _books.Add(book);
+            }
         }
         public List<User> GetUsers()
         {
@@ -27,7 +59,16 @@ namespace sda_onsite_2_csharp_library_management.src
         }
         public void AddUser(User user)
         {
-            _users.Add(user);
+            User? exsectUser = _users.Find(findUser => findUser.GetName() == user.GetName());
+            if (exsectUser != null)
+            {
+                throw new Exception("User already exists");
+            }
+            else
+            {
+
+                _users.Add(user);
+            }
         }
         public void FindBook(string title)
         {
@@ -39,7 +80,7 @@ namespace sda_onsite_2_csharp_library_management.src
 
             else
             {
-                Console.WriteLine("Book not found");
+                throw new Exception("Book not found");
             }
         }
 
@@ -48,11 +89,11 @@ namespace sda_onsite_2_csharp_library_management.src
             User? users = _users.Find(item => item.GetName() == name);
             if (users != null)
             {
-                Console.WriteLine($"this users is {users.GetName()}");
+                Console.WriteLine($"The users name is {users.GetName()}");
             }
             else
             {
-                Console.WriteLine("Can't find item");
+                throw new Exception("Can't found user");
             }
         }
 
@@ -67,7 +108,7 @@ namespace sda_onsite_2_csharp_library_management.src
             }
             else
             {
-                Console.WriteLine("Book not found");
+                throw new Exception("Book not found");
             }
         }
 
@@ -82,28 +123,39 @@ namespace sda_onsite_2_csharp_library_management.src
             }
             else
             {
-                Console.WriteLine("User not found");
+                throw new Exception("User not found");
             }
         }
 
 
         public List<Book> GetBooksByDate(SortType type)
         {
+            var Page = 1;
+            var itemsPerPage = 4;
+            var currentPage = (Page - 1) * itemsPerPage;
             if (type == SortType.ASC)
             {
-                var AscByDate = _books.OrderBy(book => book.GetDate()).ToList();
+                List<Book>? AscByDate = _books.OrderBy(book => book.GetDate())
+                                        .Select(i => i)
+                                        .Skip(currentPage)
+                                        .Take(itemsPerPage)
+                                        .ToList();
                 Console.WriteLine("Sorting date by Ascending");
                 return AscByDate;
             }
             if (type == SortType.DESC)
             {
-                var DescByDate = _books.OrderByDescending(book => book.GetDate()).ToList();
+                List<Book>? DescByDate = _books.OrderByDescending(book => book.GetDate())
+                                        .Select(i => i)
+                                        .Skip(currentPage)
+                                        .Take(itemsPerPage)
+                                        .ToList();
                 Console.WriteLine("Sorting date by Descending");
                 return DescByDate;
             }
             else
             {
-                Console.WriteLine("Please type ASC or DESC to get something");
+                Console.WriteLine("Please type ASC or DESC to get sorting");
                 return _books;
             }
         }
@@ -111,21 +163,32 @@ namespace sda_onsite_2_csharp_library_management.src
 
         public List<User> GetUsersByDate(SortType type)
         {
+            var Page = 1;
+            var itemsPerPage = 4;
+            var currentPage = (Page - 1) * itemsPerPage;
             if (type == SortType.ASC)
             {
-                var AscByDate = _users.OrderBy(user => user.GetDate()).ToList();
+                List<User>? AscByDate = _users.OrderBy(user => user.GetDate())
+                                        .Select(i=>i)
+                                        .Skip(currentPage)
+                                        .Take(itemsPerPage)
+                                        .ToList();
                 Console.WriteLine("Sorting date by Ascending");
                 return AscByDate;
             }
             if (type == SortType.DESC)
             {
-                var DescByDate = _users.OrderByDescending(user => user.GetDate()).ToList();
+                List<User>? DescByDate = _users.OrderByDescending(user => user.GetDate())
+                                        .Select(i => i)
+                                        .Skip(currentPage)
+                                        .Take(itemsPerPage)
+                                        .ToList();
                 Console.WriteLine("Sorting date by Descending");
                 return DescByDate;
             }
             else
             {
-                Console.WriteLine("Please type ASC or DESC to get something");
+                Console.WriteLine("Please type ASC or DESC to get sorting");
                 return _users;
             }
         }
