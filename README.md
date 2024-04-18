@@ -68,7 +68,7 @@ var book20 = new Book("Anna Karenina");
 
 ## Level 2 and 3: Setup Notification Service
 
-1. Create an `INotificationService` interface with a method `SendNotificationOnSucess` and `SendNotificationOnFailure`.
+1. Create an `INotificationService` interface with a method `SendNotificationOnSuccess` and `SendNotificationOnFailure`.
 2. Create two different notification service implementations: `EmailNotificationService` and `SMSNotificationService`.
    - EmailNotificationService implementation:
      - SendNotificationOnSuccess: Sends a comprehensive email, including action details, a summary of the item, user feedback instructions, and a support contact. For example, "Hello, a new book titled 'XYZ' has been successfully added to the Library. If you have any queries or feedback, please contact our support team at support@library.com."

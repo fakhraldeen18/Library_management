@@ -6,7 +6,7 @@ namespace sda_onsite_2_csharp_library_management.src
         private string _title;
         public Book(string title , DateTime? date = null):base(date)
         {
-            this._title = title;
+            _title = title;
         }
         public string GetTitle()
         {
